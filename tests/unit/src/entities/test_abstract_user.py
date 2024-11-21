@@ -76,3 +76,24 @@ class AbstractUserTest(TestCase):
         with pytest.raises(ValueError):
             self.generate_client_user(username="john", password="johnPa$$1234")
 
+    def test_invalid_email_none(self):
+        with pytest.raises(TypeError):
+            self.generate_client_user(email=None)
+    
+    def test_invalid_email_empty(self):
+        with pytest.raises(ValueError):
+            self.generate_client_user(email="")
+    
+    def test_invalid_email_type(self):
+        with pytest.raises(TypeError):
+            self.generate_client_user(email=123)
+    
+    def test_invalid_email_format(self):
+        with pytest.raises(ValueError):
+            self.generate_client_user(email="johnmail.com")
+        with pytest.raises(ValueError):
+            self.generate_client_user(email="john@mailcom")
+        with pytest.raises(ValueError):
+            self.generate_client_user(email="johnmailcom")
+    
+    

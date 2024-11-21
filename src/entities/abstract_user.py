@@ -26,7 +26,7 @@ class AbstractUser(ABC):
     __email: str = None
     __USERNAME_PATTERN: str = r"^[a-zA-Z][a-zA-Z0-9]{3,19}$"
     __PASSWORD_PATTERN: str = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,}$"
-
+    __EMAIL_PATTERN: str = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 
     def __init__(self, username: str, password: str, email: str):
         """Class Constructor
@@ -42,8 +42,8 @@ class AbstractUser(ABC):
         """
         self.username = username
         self.__set_password(password)
+        self.email = email
         self.__created_on = datetime.now()
-        self.__email = email
     
     def __set_password(self, password: str):
         """Hash and then sets the password for the user.
@@ -155,7 +155,15 @@ class AbstractUser(ABC):
         ValueError
             When trying to change the email attribute already set.
         """
-        raise ValueError("Email cannot be changed")
+        if self.__email is not None:
+            raise ValueError("Email cannot be changed")
+        elif not isinstance(email, str):
+            raise TypeError("Email must be a string")
+        elif re.match(self.__EMAIL_PATTERN, email) is None:
+            raise ValueError("Email must be a valid e-mail address")
+        else:
+            self.__email = email
+        
     
     def authenticate(self, password: str):
         """Provisory method to authenticates the user with the given password.
