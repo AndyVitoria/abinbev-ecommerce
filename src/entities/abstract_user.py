@@ -90,6 +90,7 @@ class AbstractUser(ABC):
             raise TypeError("Username must be a string")
         elif re.match(self.__USERNAME_PATTERN, username) is None:
             raise ValueError("Username must be a alphanumeric string between 4 and 20 characters long and start with a letter")
+        #TODO: Check if username is already in use
         else:
             self.__username = username
         
