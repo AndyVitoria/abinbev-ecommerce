@@ -1,6 +1,7 @@
 from abc import ABC
 from hashlib import sha256
 from datetime import datetime
+import re
     
 class AbstractUser(ABC):
     """The AbstractUser class is an abstract class that defines the basic structure of a user.
@@ -19,11 +20,12 @@ class AbstractUser(ABC):
     ValueError
         When trying to change inmutable attributes such as username, created_on, or email properties.
     """
-    __username: str
-    __password: str
-    __created_on: datetime
-    __email: str
-
+    __username: str = None
+    __password: str = None
+    __created_on: datetime = None
+    __email: str = None
+    __USERNAME_PATTERN: str = r"^[a-zA-Z][a-zA-Z0-9]{3,19}$"
+        
     def __init__(self, username: str, password: str, email: str):
         """Class Constructor
 
@@ -36,7 +38,7 @@ class AbstractUser(ABC):
         email: str
             The user's email.
         """
-        self.__username = username
+        self.username = username
         self.__password = self.__set_password(password)
         self.__created_on = datetime.now()
         self.__email = email
@@ -79,9 +81,18 @@ class AbstractUser(ABC):
         ------
         ValueError
             When trying to change the username already set.
+        TypeError
+            When the username is not a string
         """
-        raise ValueError("Username cannot be changed")
-    
+        if self.__username is not None:
+            raise ValueError("Username cannot be changed")
+        elif not isinstance(username, str):
+            raise TypeError("Username must be a string")
+        elif re.match(self.__USERNAME_PATTERN, username) is None:
+            raise ValueError("Username must be a alphanumeric string between 4 and 20 characters long and start with a letter")
+        else:
+            self.__username = username
+        
     @property
     def created_on(self):
         """Property for the created_on attribute.
