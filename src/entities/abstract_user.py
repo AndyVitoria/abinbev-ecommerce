@@ -25,7 +25,9 @@ class AbstractUser(ABC):
     __created_on: datetime = None
     __email: str = None
     __USERNAME_PATTERN: str = r"^[a-zA-Z][a-zA-Z0-9]{3,19}$"
-        
+    __PASSWORD_PATTERN: str = r"^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,}$"
+
+
     def __init__(self, username: str, password: str, email: str):
         """Class Constructor
 
@@ -39,7 +41,7 @@ class AbstractUser(ABC):
             The user's email.
         """
         self.username = username
-        self.__password = self.__set_password(password)
+        self.__set_password(password)
         self.__created_on = datetime.now()
         self.__email = email
     
@@ -51,7 +53,14 @@ class AbstractUser(ABC):
         password : str
             The password to be set.
         """
-        self.__password = sha256(password.encode()).hexdigest()
+        if self.__password is not None: #TODO: Add the possibility to change the password
+            raise ValueError("Password cannot be changed")
+        elif not isinstance(password, str):
+            raise TypeError("Password must be a string")
+        if re.match(self.__PASSWORD_PATTERN, password) and self.username not in password:
+            self.__password = sha256(password.encode()).hexdigest()
+        else:
+            raise ValueError("Password must have at least 8 characters, one uppercase letter, one lowercase letter, one number, one special character and cannot contain the username on it.")
 
     def validate_user():
         """Validates the user's information."""
