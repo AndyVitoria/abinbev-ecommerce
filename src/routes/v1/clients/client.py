@@ -11,7 +11,6 @@ def register_client(client_registry: ClientUser):
 
     try:
         print(f"Registering Client: {client_registry.username}, Email: {client_registry.email}")
-        #user = ClientUser(username=client_registry.username, password=client_registry.password.get_secret_value(), email=client_registry.email)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return {"message": "User registered successfully"}
