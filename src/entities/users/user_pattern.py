@@ -5,7 +5,7 @@ class UserPatterns:
     @property
     def USERNAME_PATTERN(cls) -> str:
         return cls.__USERNAME_PATTERN
-    
+
     @property
     def PASSWORD_PATTERN(cls) -> str:
         return cls.__PASSWORD_PATTERN
