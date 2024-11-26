@@ -1,17 +1,21 @@
 from fastapi.routing import APIRouter, HTTPException
 
-from src.entities import ClientUser
+from src.entities import User
+from src.usecases import RegisterUser, UserRole
+
 
 client_router = APIRouter(tags=["clients"], prefix="/clients")
 
-@client_router.post("/")
-def register_client(client_registry: ClientUser):
-    # Here you would typically add logic to save the user to a database
-    # For this example, we'll just print the user data and return a success message
 
+@client_router.post("/")
+def register_client(client_registry: User):
     try:
-        print(f"Registering Client: {client_registry.username}, Email: {client_registry.email}")
+        register_client_usecase = RegisterUser(
+            user=client_registry, role=UserRole.CLIENT
+        )
+
+        register_client_usecase.register_user(client_registry)
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return {"message": "User registered successfully"}
-
