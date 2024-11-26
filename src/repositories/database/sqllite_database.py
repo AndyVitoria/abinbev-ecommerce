@@ -4,6 +4,7 @@ from sqlalchemy import Engine
 
 class SQLLiteDatabaseMonostate:
     """Class that creates a Monostate instance of a SQLLite database engine"""
+
     __shared_state = {"engine": None}
 
     def __new__(cls, database_url, *args, **kwargs):

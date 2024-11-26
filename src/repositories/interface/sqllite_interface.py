@@ -6,6 +6,7 @@ from src.repositories.database import SQLLiteDatabaseMonostate
 
 class SQLLiteInterface:
     """Interface to interact with the SQLite database"""
+
     def __init__(self, database_url: str = "sqlite:///./test.db"):
         """Class constructor
 
