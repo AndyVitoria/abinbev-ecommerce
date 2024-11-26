@@ -1,6 +1,8 @@
 from fastapi.testclient import TestClient
 
 from src.routes.v1.clients import client_router
+from mock import patch
+
 
 client = TestClient(client_router)
 
@@ -13,24 +15,10 @@ def get_client_json(
     return {"username": username, "email": email, "password": password}
 
 
-def test_read_clients():
+def test_register_clients():
     body = get_client_json()
-    response = client.post("/clients", json=body)
+    with patch("src.usecases.RegisterUser.register_user") as mock_client_usecasse:
+        mock_client_usecasse.post.return_value = True
+        response = client.post("/clients", json=body)
     assert response.status_code == 200
     assert response.json() == {"message": "User registered successfully"}
-
-
-# def test_read_clients_invalid_username():
-#     invalid_input = {
-#         "1TestClient": 422, # Starting with number
-#         #1234: 422, # Invalid type
-#         #"@TestClient": 422, # Special character
-#         #"TestClient"*7: 422, # Longer than 20 characters
-#         #"": 422, # Empty
-#         #None: 422 # None
-#     }
-#     for invalid_input, status_code in invalid_input.items():
-#         body = get_client_json(username=invalid_input)
-#         response = client.post("/clients", json=body)
-#         assert response.status_code == status_code
-#         assert response.json()[0]["input"] == invalid_input
