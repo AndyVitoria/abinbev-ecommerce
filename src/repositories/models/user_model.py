@@ -2,10 +2,12 @@ from sqlmodel import SQLModel, Field
 from hashlib import sha256
 
 from src.entities.users import User
+from src.utils import FakerVault, CryptUtils
 
 
 class UserModel(SQLModel, table=True):
     """UserModel is a SQLModel representation of the User entity"""
+
     id: int = Field(primary_key=True)
     username: str
     email: str
@@ -27,9 +29,15 @@ class UserModel(SQLModel, table=True):
         UserModel
             The UserModel created based on the User entity provided
         """
+        vault = FakerVault()
+        crypt_utils = CryptUtils(
+            vault.get_secret("SECRET_KEY"),
+            vault.get_secret("ALGORITHM"),
+            vault.get_secret("ACCESS_TOKEN_EXPIRE_MINUTES"),
+        )
         return cls(
             username=entity.username,
             email=entity.email,
-            password=sha256(entity.password.get_secret_value().encode()).hexdigest(),
+            password=crypt_utils.hash_password(entity.password.get_secret_value()),
             is_superuser=entity.is_superuser,
         )
