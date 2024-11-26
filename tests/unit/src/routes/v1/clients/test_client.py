@@ -4,12 +4,14 @@ from src.routes.v1.clients import client_router
 
 client = TestClient(client_router)
 
-def get_client_json(username: str = "TestClient", email: str = "test@client.com", password: str = "T3stP4ssw@rd"):
-    return {
-        "username": username,
-        "email": email,
-        "password": password
-    }
+
+def get_client_json(
+    username: str = "TestClient",
+    email: str = "test@client.com",
+    password: str = "T3stP4ssw@rd",
+):
+    return {"username": username, "email": email, "password": password}
+
 
 def test_read_clients():
     body = get_client_json()
