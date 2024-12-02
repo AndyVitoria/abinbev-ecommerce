@@ -33,7 +33,9 @@ def remove_item(cart_item: CartItem, token: Token):
 def get_cart_items(token: Token):
     user = LoginUseCase.decode_token_to_user(token.access_token)
     cart_use_case = CartUseCase(user.id)
-    return cart_use_case.get_cart_items().values()
+    return [ cart_item.to_entity() for cart_item in
+        cart_use_case.get_cart_items().values()
+    ]
 
 
 @cart_router.delete("/items")
