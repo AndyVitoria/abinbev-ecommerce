@@ -34,7 +34,8 @@ def create_product(product: Product, token: Token):
     if product_use_case.product_exists(product_name=product.name, product_id=product.id):
         raise EntityAlreadyExistsError("Product")
     else:
-        new_product = product_use_case.create_or_update_product()
+        product_use_case.create_or_update_product()
+        new_product = product_use_case.product
     return {
         "message": "Product registered successfully",
         "product": {
@@ -56,7 +57,8 @@ def update_product(product_id: int, product: Product, token: Token):
     product.id = product_id
     product.owner_id = old_product.owner_id
     product_use_case = RegisterProductUseCase(product)
-    new_product = product_use_case.create_or_update_product()
+    product_use_case.create_or_update_product()
+    new_product = product_use_case.product
 
     return {
         "message": "Product updated successfully",
@@ -77,7 +79,8 @@ def delete_product(product_id: int, token: Token):
     check_user_authorization(token, product)
     product.is_active = False
     product_use_case = RegisterProductUseCase(product)
-    new_product = product_use_case.create_or_update_product()
+    product_use_case.create_or_update_product()
+    new_product = product_use_case.product  
     return {
         "detail": "Product deleted",
         "product": {

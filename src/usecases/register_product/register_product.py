@@ -53,3 +53,7 @@ class RegisterProductUseCase:
         self.__product.is_active = False
         self.__database_interface.create_or_update_product()
         return self.__product
+    
+    @property
+    def product(self):
+        return self.__product
