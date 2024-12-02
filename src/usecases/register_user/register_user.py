@@ -3,6 +3,7 @@ from src.repositories.models import UserModel
 from src.repositories.interface import SQLLiteInterface
 from src.repositories.database import SQLLiteDatabaseMonostate
 from .user_role import UserRole
+from src.exceptions import FieldAlreadyInUseError
 
 
 class RegisterUser:
@@ -14,11 +15,6 @@ class RegisterUser:
 
     def create_model(self):
         """Creates an instance of UserModel based on the User entity provided
-
-        Parameters
-        ----------
-        user_entity: User
-            The user entity to be converted to a UserModel
 
         Returns
         -------
@@ -43,7 +39,7 @@ class RegisterUser:
 
         if not used_spot:
             user_model = self.create_model()
-            self.__database_interface.create_or_update(user_model)
+            self.__database_interface.create(user_model)
             return user_model
         else:
-            raise ValueError("Email or username already in use")
+            raise FieldAlreadyInUseError(field="Email or username")
