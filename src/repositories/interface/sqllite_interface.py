@@ -64,7 +64,7 @@ class SQLLiteInterface:
             else:
                 raise ValueError("Model not found")
 
-    def list(self, model_class: Type[SQLModel]):
+    def list(self, model_class: Type[SQLModel], return_entity: bool = False):
         """Lists all models of a given class
 
         Parameters
@@ -79,9 +79,12 @@ class SQLLiteInterface:
         """
         with Session(self.database.get_engine()) as session:
             statement = select(model_class)
-            return session.exec(statement).all()
+            result = session.exec(statement).all()
+            
+            return [model.to_entity() for model in result] if return_entity else result
 
-    def where(self, model_class: Type[SQLModel], condition: BinaryExpression):
+
+    def where(self, model_class: Type[SQLModel], condition: BinaryExpression, return_entity: bool = False):
         """Lists all models of a given class that satisfy a given condition
 
         Parameters
@@ -98,9 +101,11 @@ class SQLLiteInterface:
         """
         with Session(self.database.get_engine()) as session:
             statement = select(model_class).where(condition)
-            return session.exec(statement).all()
+            result = session.exec(statement).all()
+            
+            return [model.to_entity() for model in result] if return_entity else result
 
-    def get_model_by_id(self, model_class: Type[SQLModel], model_id: int):
+    def get_model_by_id(self, model_class: Type[SQLModel], model_id: int, return_entity: bool = False):
         """Gets a model by its ID
 
         Parameters
@@ -117,7 +122,9 @@ class SQLLiteInterface:
         """
         with Session(self.database.get_engine()) as session:
             statement = select(model_class).where(model_class.id == model_id)
-            return session.exec(statement).first()
+            result = session.exec(statement).first()
+
+            return result.to_entity() if return_entity else result
 
     def delete(self, model: SQLModel):
         """Deletes a model from the database
