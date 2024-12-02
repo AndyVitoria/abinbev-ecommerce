@@ -35,3 +35,8 @@ def get_order(order_id: int, token: Token):
         return order
     else:
         raise AuthenticationError("User is not authorized to view this order")
+
+@order_router.get("/")
+def get_orders(token: Token):
+    user = LoginUseCase.decode_token_to_user(token.access_token)
+    return OrderUseCase.get_orders(user_id=user.id)
