@@ -1,10 +1,12 @@
 from pydantic import BaseModel, EmailStr, SecretStr, field_validator
 import re
+from typing import Optional
 
 from .user_pattern import UserPatterns
 
 
 class User(BaseModel):
+    id: Optional[int] = None
     username: str
     password: SecretStr
     email: EmailStr
