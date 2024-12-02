@@ -1,4 +1,4 @@
-from src.repositories.models import OrderModel, OrderedItemModel, ProductModel
+from src.repositories.models import OrderModel, ProductModel, OrderedItemModel
 from src.entities import Order, OrderedItem
 from src.repositories.interface import SQLLiteInterface
 from src.exceptions import NotEnoughStockError, NotFoundError
@@ -10,8 +10,8 @@ class OrderUseCase:
 
     def __init__(self, user_id: int):
         self.__user_id = user_id
-        self.__cart_use_case = CartUseCase(user_id)
-        self.__order = self.create_order(user_id)
+        self.__cart_use_case = CartUseCase(self.__user_id)
+        self.__order = self.create_order(self.__user_id)
 
     def create_order_model(self):
         return OrderModel.from_entity(self.__order)
@@ -62,7 +62,12 @@ class OrderUseCase:
 
     @classmethod
     def get_order(cls, order_id: int):
-        return cls.__database_interface.get_model_by_id(OrderModel, order_id)
+        return cls.__database_interface.get_model_by_id(OrderModel, order_id, return_entity=True)
+
+    @classmethod
+    def get_orders(cls, user_id: int):
+        return cls.__database_interface.where(OrderModel, condition=(OrderModel.user_id == user_id), return_entity=True)
+        
 
     def check_payment(self):
         return True
