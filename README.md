@@ -2,6 +2,10 @@
 
 This is an E-commerce API built with FastAPI based in Clean Architecture. It provides various endpoints for managing clients, authentication, products, carts, and orders.
 
+## Implementation Details
+
+For more information about the implementation, please refer to the [report.md](report.md) file.
+
 ## Highlights
 
 - **FastAPI**: A modern, fast (high-performance), web framework for building APIs with Python 3.10+.
