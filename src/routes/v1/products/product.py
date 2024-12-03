@@ -1,5 +1,6 @@
 # routes.py
 from fastapi import APIRouter, Depends, HTTPException
+from typing import List
 from jwt.exceptions import DecodeError
 from src.entities import Product, Token
 from src.usecases import (
@@ -88,4 +89,39 @@ def delete_product(product_id: int, token: Token):
             "name": new_product.name,
             "description": new_product.description,
         },
+    }
+
+
+@product_router.get("/{product_id}")
+def get_product(product_id: int, token: Token):
+    product = RegisterProductUseCase.get_product(product_id).to_entity()
+    if not product:
+        raise NotFoundError("Product")
+    return {
+        "product": {
+            "id": product.id,
+            "name": product.name,
+            "description": product.description,
+            "price": product.price,
+            "stock": product.stock,
+            "is_active": product.is_active,
+        }
+    }
+
+@product_router.get("/")
+def list_products():
+    products:List[Product] = RegisterProductUseCase.list_products()
+    return {
+        "products": [
+            {
+                "id": product.id,
+                "name": product.name,
+                "description": product.description,
+                "price": product.price,
+                "price": product.price,
+                "stock": product.stock,
+                "is_active": product.is_active,
+            }
+            for product in products
+        ]
     }

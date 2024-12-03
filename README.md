@@ -144,8 +144,8 @@ to get more information about the routes, you can access the Swagger documentati
 #### Product Routes
 
 - **Endpoint**: `/v1/products`
-- **Method**: `POST`.
-- **Description**: Add a new product.
+- **Method**: `POST`, `GET`.
+- **Description**: Add a new product or get all products.
 
     ```sh
     curl --location 'http://127.0.0.1:8000/v1/products/' \
@@ -165,8 +165,8 @@ to get more information about the routes, you can access the Swagger documentati
     ```
   
 - **Endpoint**: `/v1/products/<id>`
-- **Method**: `PUT` and `DELETE`.
-- **Description**: Updates or deletes the product with the provided ID.
+- **Method**: `GET`, `PUT` and `DELETE`.
+- **Description**: Retrieve, update or delete the product with the provided ID.
 
     ```sh
     curl --location 'http://127.0.0.1:8000/v1/products/<product_id>' \

@@ -57,3 +57,7 @@ class RegisterProductUseCase:
     @property
     def product(self):
         return self.__product
+    
+    @classmethod
+    def list_products(cls):
+        return cls.__database_interface.list(ProductModel, return_entity=True)
