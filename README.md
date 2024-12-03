@@ -32,7 +32,6 @@ This `README.md` file provides an overview of the project, installation steps, h
 ### Prerequisites
 
 - Python 3.10+
-- pip (Python package installer)
 
 ### Installation
 
@@ -60,12 +59,25 @@ This `README.md` file provides an overview of the project, installation steps, h
 
 ### Running the Application
 
+#### With Docker
+1. Build the Docker image:
+
+    ```sh
+    docker build -t e-commerce-api .
+    ```
+2. Run the Docker container:
+    ```sh
+    docker run -d -p 8000:8000 e-commerce-api
+    ```
+
+#### Without Docker
+
 1. **Start the FastAPI server**:
     ```sh
     uvicorn main:app --port 8000 --reload
     ```
 
-    The server will start at `http://127.0.0.1:8000`.
+The application will be accessible at `http://127.0.0.1:8000`.
 
 ### Making Requests
 
